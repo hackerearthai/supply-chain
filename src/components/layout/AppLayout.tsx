@@ -10,8 +10,10 @@ export const AppLayout = () => {
         <AppSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <Topbar />
-          <main className="flex-1 p-4 md:p-6 lg:p-8">
-            <Outlet />
+          <main className="flex-1 px-4 py-8 md:px-10 md:py-10">
+            <div className="mx-auto w-full max-w-7xl">
+              <Outlet />
+            </div>
           </main>
         </div>
       </div>

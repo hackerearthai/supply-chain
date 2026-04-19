@@ -17,12 +17,12 @@ const toneMap: Record<string, Tone> = {
   "Maintenance": "muted",
 };
 
-const toneClasses: Record<Tone, string> = {
-  success: "bg-success/15 text-success border-success/30",
-  warning: "bg-warning/15 text-warning-foreground border-warning/40",
-  destructive: "bg-destructive/15 text-destructive border-destructive/30",
-  info: "bg-info/15 text-info border-info/30",
-  muted: "bg-muted text-muted-foreground border-border",
+const dotClasses: Record<Tone, string> = {
+  success: "bg-success",
+  warning: "bg-warning",
+  destructive: "bg-destructive",
+  info: "bg-foreground",
+  muted: "bg-muted-foreground",
 };
 
 interface StatusBadgeProps {
@@ -35,18 +35,11 @@ export const StatusBadge = ({ status, className }: StatusBadgeProps) => {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium",
-        toneClasses[tone],
+        "inline-flex items-center gap-2 text-xs font-medium text-foreground",
         className,
       )}
     >
-      <span className={cn("h-1.5 w-1.5 rounded-full", {
-        "bg-success": tone === "success",
-        "bg-warning": tone === "warning",
-        "bg-destructive": tone === "destructive",
-        "bg-info": tone === "info",
-        "bg-muted-foreground": tone === "muted",
-      })} />
+      <span className={cn("h-1.5 w-1.5 rounded-full", dotClasses[tone])} />
       {status}
     </span>
   );

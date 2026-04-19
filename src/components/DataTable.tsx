@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export interface Column<T> {
@@ -18,16 +17,16 @@ interface DataTableProps<T> {
 
 export function DataTable<T>({ columns, data, rowKey, emptyMessage = "No results found." }: DataTableProps<T>) {
   return (
-    <Card className="overflow-hidden shadow-elegant">
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-muted/60">
-            <tr>
+          <thead>
+            <tr className="border-b border-border">
               {columns.map((col) => (
                 <th
                   key={col.key}
                   className={cn(
-                    "px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground",
+                    "px-5 py-3 text-left text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground",
                     col.className,
                   )}
                 >
@@ -39,15 +38,15 @@ export function DataTable<T>({ columns, data, rowKey, emptyMessage = "No results
           <tbody className="divide-y divide-border">
             {data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-12 text-center text-muted-foreground">
+                <td colSpan={columns.length} className="px-5 py-16 text-center text-sm text-muted-foreground">
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
               data.map((row) => (
-                <tr key={rowKey(row)} className="transition-base hover:bg-muted/40">
+                <tr key={rowKey(row)} className="transition-base hover:bg-muted/50">
                   {columns.map((col) => (
-                    <td key={col.key} className={cn("px-4 py-3 text-foreground", col.className)}>
+                    <td key={col.key} className={cn("px-5 py-4 text-foreground", col.className)}>
                       {col.render ? col.render(row) : (row as any)[col.key]}
                     </td>
                   ))}
@@ -57,6 +56,6 @@ export function DataTable<T>({ columns, data, rowKey, emptyMessage = "No results
           </tbody>
         </table>
       </div>
-    </Card>
+    </div>
   );
 }
