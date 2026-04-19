@@ -45,14 +45,14 @@ const Shipments = () => {
   }, [items, statusFilter, searchQuery, searchFilter]);
 
   const columns: Column<Shipment>[] = [
-    { key: "orderId", header: "Order ID", render: (r) => <span className="font-mono text-xs font-semibold text-primary">{r.orderId}</span> },
+    { key: "orderId", header: "Order ID", render: (r) => <span className="font-mono text-xs font-medium text-foreground">{r.orderId}</span> },
     {
       key: "route",
-      header: "From → To",
+      header: "Route",
       render: (r) => (
         <div className="flex items-center gap-2">
           <span className="font-medium">{r.from}</span>
-          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
+          <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.5} />
           <span className="text-muted-foreground">{r.to}</span>
         </div>
       ),
@@ -64,11 +64,12 @@ const Shipments = () => {
   return (
     <div className="animate-fade-in">
       <PageHeader
+        eyebrow="Logistics"
         title="Shipments"
         description="Track in-transit and delivered orders across the network."
         actions={
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-44 border-border">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -81,8 +82,9 @@ const Shipments = () => {
         }
       />
 
-      <div className="mb-3 text-sm text-muted-foreground">
-        {filtered.length} of {items.length} shipments
+      <div className="mb-4 flex items-baseline justify-between">
+        <p className="micro-label">All Shipments</p>
+        <span className="text-xs text-muted-foreground">{filtered.length} of {items.length}</span>
       </div>
       <DataTable columns={columns} data={filtered} rowKey={(r) => r.orderId} />
     </div>
