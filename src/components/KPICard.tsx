@@ -10,30 +10,24 @@ interface KPICardProps {
   accent?: "primary" | "accent" | "warning" | "success";
 }
 
-const accentMap = {
-  primary: "bg-primary/10 text-primary",
-  accent: "bg-accent/10 text-accent",
-  warning: "bg-warning/15 text-warning-foreground",
-  success: "bg-success/15 text-success",
-};
-
-export const KPICard = ({ label, value, icon: Icon, trend, accent = "primary" }: KPICardProps) => {
+export const KPICard = ({ label, value, icon: Icon, trend }: KPICardProps) => {
   return (
-    <Card className="gradient-surface relative overflow-hidden p-5 shadow-elegant transition-base hover:shadow-lg">
+    <Card className="rounded-xl border border-border bg-card p-5 shadow-none transition-base hover:border-foreground/20">
       <div className="flex items-start justify-between gap-4">
-        <div className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">{label}</p>
-          <p className="text-3xl font-semibold tracking-tight text-foreground">{value}</p>
-          {trend && (
-            <p className={cn("text-xs font-medium", trend.positive ? "text-success" : "text-destructive")}>
-              {trend.value}
-            </p>
-          )}
-        </div>
-        <div className={cn("flex h-11 w-11 items-center justify-center rounded-xl", accentMap[accent])}>
-          <Icon className="h-5 w-5" />
-        </div>
+        <p className="micro-label">{label}</p>
+        <Icon className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
       </div>
+      <p className="mt-4 text-4xl font-semibold tracking-tight text-foreground">{value}</p>
+      {trend && (
+        <p
+          className={cn(
+            "mt-2 text-xs",
+            trend.positive ? "text-muted-foreground" : "text-destructive",
+          )}
+        >
+          {trend.value}
+        </p>
+      )}
     </Card>
   );
 };

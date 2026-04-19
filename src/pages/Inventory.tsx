@@ -45,27 +45,27 @@ const Inventory = () => {
   }), [items]);
 
   const columns: Column<InventoryItem>[] = [
-    { key: "sku", header: "SKU Code", render: (r) => <span className="font-mono text-xs font-semibold text-primary">{r.sku}</span> },
-    { key: "name", header: "Product Name", render: (r) => <span className="font-medium">{r.name}</span> },
-    { key: "warehouse", header: "Warehouse" },
-    { key: "quantity", header: "Quantity", className: "text-right", render: (r) => <span className="tabular-nums">{r.quantity}</span> },
-    { key: "reorderLevel", header: "Reorder Level", className: "text-right", render: (r) => <span className="tabular-nums text-muted-foreground">{r.reorderLevel}</span> },
+    { key: "sku", header: "SKU", render: (r) => <span className="font-mono text-xs font-medium text-foreground">{r.sku}</span> },
+    { key: "name", header: "Product", render: (r) => <span className="font-medium">{r.name}</span> },
+    { key: "warehouse", header: "Warehouse", render: (r) => <span className="text-muted-foreground">{r.warehouse}</span> },
+    { key: "quantity", header: "Qty", className: "text-right", render: (r) => <span className="tabular-nums">{r.quantity}</span> },
+    { key: "reorderLevel", header: "Reorder", className: "text-right", render: (r) => <span className="tabular-nums text-muted-foreground">{r.reorderLevel}</span> },
     { key: "status", header: "Status", render: (r) => <StatusBadge status={r.status} /> },
   ];
 
   return (
     <div className="animate-fade-in">
-      <PageHeader title="Inventory" description="Stock levels across all warehouses." />
+      <PageHeader eyebrow="Catalog" title="Inventory" description="Stock levels across all warehouses." />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KPICard label="Total SKUs" value={stats.total} icon={Package} accent="primary" />
-        <KPICard label="Low Stock Items" value={stats.low} icon={AlertTriangle} accent="warning" />
-        <KPICard label="Out of Stock" value={stats.out} icon={XCircle} accent="warning" />
-        <KPICard label="Stock Value" value={`$${(stats.value / 1000).toFixed(1)}K`} icon={DollarSign} accent="success" />
+        <KPICard label="Total SKUs" value={stats.total} icon={Package} />
+        <KPICard label="Low Stock" value={stats.low} icon={AlertTriangle} trend={{ value: "Needs attention", positive: false }} />
+        <KPICard label="Out of Stock" value={stats.out} icon={XCircle} trend={{ value: "Action required", positive: false }} />
+        <KPICard label="Stock Value" value={`$${(stats.value / 1000).toFixed(1)}K`} icon={DollarSign} />
       </div>
 
-      <section className="my-8">
-        <h2 className="mb-3 text-lg font-semibold text-foreground">Stock alerts</h2>
+      <section className="mt-12">
+        <p className="micro-label mb-4">Stock Alerts</p>
         <div className="grid gap-3 lg:grid-cols-2">
           {alerts.map((a) => (
             <AlertCard key={a.id} severity={a.severity} title={a.title} description={a.description} />
@@ -73,10 +73,10 @@ const Inventory = () => {
         </div>
       </section>
 
-      <section>
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">All items</h2>
-          <span className="text-sm text-muted-foreground">{filtered.length} of {items.length}</span>
+      <section className="mt-12">
+        <div className="mb-4 flex items-baseline justify-between">
+          <p className="micro-label">All Items</p>
+          <span className="text-xs text-muted-foreground">{filtered.length} of {items.length}</span>
         </div>
         <DataTable columns={columns} data={filtered} rowKey={(r) => r.sku} />
       </section>
