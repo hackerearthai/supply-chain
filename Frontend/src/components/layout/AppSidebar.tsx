@@ -1,12 +1,28 @@
+<<<<<<< HEAD
 import { LayoutDashboard, Package, Truck, TrendingUp, Sparkles, Warehouse, Boxes, ShoppingCart } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
+=======
+import { LayoutDashboard, Package, Truck, TrendingUp, Sparkles, Warehouse, Boxes } from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+>>>>>>> 764b0188947957e32badcd05401a3e015ee89f4b
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
 const items = [
+<<<<<<< HEAD
   { title: "Dashboard",          url: "/",          icon: LayoutDashboard },
   { title: "Orders",             url: "/orders",    icon: ShoppingCart },
   { title: "Inventory",          url: "/inventory", icon: Package },
@@ -14,10 +30,22 @@ const items = [
   { title: "Demand Forecast",    url: "/forecast",  icon: TrendingUp },
   { title: "AI Recommendations", url: "/ai",        icon: Sparkles },
   { title: "Warehouses",         url: "/warehouses",icon: Warehouse },
+=======
+  { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Inventory", url: "/inventory", icon: Package },
+  { title: "Shipments", url: "/shipments", icon: Truck },
+  { title: "Demand Forecast", url: "/forecast", icon: TrendingUp },
+  { title: "AI Recommendations", url: "/ai", icon: Sparkles },
+  { title: "Warehouses", url: "/warehouses", icon: Warehouse },
+>>>>>>> 764b0188947957e32badcd05401a3e015ee89f4b
 ];
 
 export function AppSidebar() {
   const location = useLocation();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 764b0188947957e32badcd05401a3e015ee89f4b
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
       <SidebarHeader className="bg-sidebar px-4 py-5">
@@ -41,7 +69,12 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <NavLink
+<<<<<<< HEAD
                         to={item.url} end
+=======
+                        to={item.url}
+                        end
+>>>>>>> 764b0188947957e32badcd05401a3e015ee89f4b
                         className={cn(
                           "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-base",
                           active

@@ -6,7 +6,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppProvider } from "@/context/AppContext";
 import { AppLayout } from "@/components/layout/AppLayout";
 import Dashboard from "./pages/Dashboard";
+<<<<<<< HEAD
 import Orders from "./pages/Orders";
+=======
+>>>>>>> 764b0188947957e32badcd05401a3e015ee89f4b
 import Inventory from "./pages/Inventory";
 import Shipments from "./pages/Shipments";
 import DemandForecast from "./pages/DemandForecast";
@@ -26,13 +29,20 @@ const App = () => (
           <Routes>
             <Route element={<AppLayout />}>
               <Route path="/" element={<Dashboard />} />
+<<<<<<< HEAD
               <Route path="/orders" element={<Orders />} />
+=======
+>>>>>>> 764b0188947957e32badcd05401a3e015ee89f4b
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/shipments" element={<Shipments />} />
               <Route path="/forecast" element={<DemandForecast />} />
               <Route path="/ai" element={<AIRecommendations />} />
               <Route path="/warehouses" element={<Warehouses />} />
             </Route>
+<<<<<<< HEAD
+=======
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+>>>>>>> 764b0188947957e32badcd05401a3e015ee89f4b
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppProvider>
