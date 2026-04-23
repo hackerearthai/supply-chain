@@ -1,8 +1,15 @@
 /// <reference types="vite/client" />
-VITE_API_BASE_URL=http://localhost:5000
-VITE_FIREBASE_API_KEY="AIzaSyAFtwnJlCZif1uVNHsMNOzHcbxxyERaiS0"
-VITE_FIREBASE_AUTH_DOMAIN="supply-chain-58fc3.firebaseapp.com"
-VITE_FIREBASE_PROJECT_ID="supply-chain-58fc3"
-VITE_FIREBASE_STORAGE_BUCKET="supply-chain-58fc3.firebasestorage.app"
-VITE_FIREBASE_MESSAGING_SENDER_ID="68419786826"
-VITE_FIREBASE_APP_ID="1:68419786826:web:755ed2cd6b4c602dc72eb3"
+
+interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL: string;
+  readonly VITE_FIREBASE_API_KEY: string;
+  readonly VITE_FIREBASE_AUTH_DOMAIN: string;
+  readonly VITE_FIREBASE_PROJECT_ID: string;
+  readonly VITE_FIREBASE_STORAGE_BUCKET: string;
+  readonly VITE_FIREBASE_MESSAGING_SENDER_ID: string;
+  readonly VITE_FIREBASE_APP_ID: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
