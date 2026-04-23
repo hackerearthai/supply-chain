@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const shipmentSchema = new mongoose.Schema({
   userId: { type: String, required: true, index: true },
-  shipment_id: { type: String, required: true, unique: true },
+  shipment_id: { type: String, required: true },
   order_id: { type: String, required: true },
   carrier: { type: String, required: true },
   trackingNumber: String,

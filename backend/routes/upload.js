@@ -3,6 +3,7 @@ const multer = require('multer');
 const csv = require('csv-parser');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 const ImportHistory = require('../models/ImportHistory');
 const {
   allowedDataTypes,
@@ -48,6 +49,17 @@ const getUserId = (req, res, next) => {
   const userId = req.headers['x-user-id'] || 'demo-user'; // Default to demo-user if not provided
   req.userId = userId;
   next();
+};
+
+const ensureDatabaseConnected = (res) => {
+  if (mongoose.connection.readyState === 1) {
+    return true;
+  }
+
+  res.status(503).json({
+    error: 'MongoDB is not connected. CSV preview can still work, but saving or viewing imported data requires the database server.'
+  });
+  return false;
 };
 
 router.get('/health', (req, res) => {
@@ -214,16 +226,19 @@ async function importMappedData(userId, csvData, dataType, mapping = {}, sourceM
 
     for (const wh of uniqueWarehouses) {
       const [warehouseName, location, pincode] = wh.split('|||');
-      const existing = await Warehouse.findOne({ userId, warehouse_name: warehouseName });
-      if (!existing) {
-        await Warehouse.create({
-          userId,
-          warehouse_name: warehouseName,
-          location,
-          pincode,
-          capacity: 10000
-        });
-      }
+      await Warehouse.findOneAndUpdate(
+        { userId, warehouse_name: warehouseName },
+        {
+          $setOnInsert: {
+            userId,
+            warehouse_name: warehouseName,
+            location,
+            pincode,
+            capacity: 10000
+          }
+        },
+        { upsert: true, new: true }
+      );
     }
   }
 
@@ -338,6 +353,10 @@ router.post('/google-sheet/preview', getUserId, express.json({ limit: '2mb' }), 
 
 router.get('/history', getUserId, async (req, res) => {
   try {
+    if (!ensureDatabaseConnected(res)) {
+      return;
+    }
+
     const history = await ImportHistory.find({ userId: req.userId })
       .sort({ created_at: -1 })
       .select('sourceType sourceName sourceUrl dataType headers rowCount created_at');
@@ -351,6 +370,10 @@ router.get('/history', getUserId, async (req, res) => {
 
 router.get('/history/:id', getUserId, async (req, res) => {
   try {
+    if (!ensureDatabaseConnected(res)) {
+      return;
+    }
+
     const item = await ImportHistory.findOne({ _id: req.params.id, userId: req.userId });
     if (!item) {
       return res.status(404).json({ error: 'Imported dataset not found' });
@@ -364,6 +387,10 @@ router.get('/history/:id', getUserId, async (req, res) => {
 
 router.delete('/history/:id', getUserId, async (req, res) => {
   try {
+    if (!ensureDatabaseConnected(res)) {
+      return;
+    }
+
     const deleted = await ImportHistory.findOneAndDelete({ _id: req.params.id, userId: req.userId });
     if (!deleted) {
       return res.status(404).json({ error: 'Imported dataset not found' });
@@ -379,6 +406,10 @@ router.delete('/history/:id', getUserId, async (req, res) => {
 // Store CSV data directly without mapping
 router.post('/map-data', getUserId, express.json({ limit: '50mb' }), async (req, res) => {
   try {
+    if (!ensureDatabaseConnected(res)) {
+      return;
+    }
+
     const { csvData, dataType, mapping = {}, sourceName = '', sourceUrl = '' } = req.body;
     const result = await importMappedData(req.userId, csvData, dataType, mapping, {
       sourceType: 'csv',
@@ -409,6 +440,10 @@ router.post('/map-data', getUserId, express.json({ limit: '50mb' }), async (req,
 
 router.post('/google-sheet/map-data', getUserId, express.json({ limit: '5mb' }), async (req, res) => {
   try {
+    if (!ensureDatabaseConnected(res)) {
+      return;
+    }
+
     const { sheetUrl, dataType, mapping = {} } = req.body;
 
     if (!dataType || !allowedDataTypes.includes(dataType)) {

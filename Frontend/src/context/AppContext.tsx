@@ -55,6 +55,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     try {
       await firebaseLogout();
+      setCurrentUser("demo-user");
       setUser(null);
     } catch (error) {
       console.error("Logout error:", error);

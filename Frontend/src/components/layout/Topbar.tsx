@@ -1,4 +1,4 @@
-import { Search, ChevronDown, LogOut, Settings, User } from "lucide-react";
+import { Search, ChevronDown, LogOut, User } from "lucide-react";
 import { useApp, SearchFilter } from "@/context/AppContext";
 import {
   DropdownMenu,
@@ -25,7 +25,7 @@ const pageFilterMap: Record<string, SearchFilter[]> = {
 };
 
 export const Topbar = () => {
-  const { searchQuery, setSearchQuery, searchFilter, setSearchFilter, resetSearch, user } = useApp();
+  const { searchQuery, setSearchQuery, searchFilter, setSearchFilter, resetSearch, user, logout } = useApp();
   const location = useLocation();
 
   useEffect(() => {
@@ -106,9 +106,13 @@ export const Topbar = () => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem><User className="mr-2 h-4 w-4" />Profile</DropdownMenuItem>
-          <DropdownMenuItem><Settings className="mr-2 h-4 w-4" />Settings</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-destructive focus:text-destructive">
+          <DropdownMenuItem
+            className="text-destructive focus:text-destructive"
+            onSelect={() => {
+              void logout();
+            }}
+          >
             <LogOut className="mr-2 h-4 w-4" />Logout
           </DropdownMenuItem>
         </DropdownMenuContent>
