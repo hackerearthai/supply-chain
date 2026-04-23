@@ -6,15 +6,21 @@ import { AlertCard } from "@/components/AlertCard";
 import { DataTable, Column } from "@/components/DataTable";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useApp } from "@/context/AppContext";
-import api from "@/services/api";
+import { api } from "@/services/api";
 
 interface InventoryItem {
-  sku: string;
-  name: string;
-  warehouse: string;
+  _id?: string;
+  userId: string;
+  product: string;
+  sku?: string;
   quantity: number;
-  reorderLevel: number;
-  status: string;
+  warehouse?: string;
+  location?: string;
+  minStock?: number;
+  maxStock?: number;
+  unitCost?: number;
+  lastUpdated?: string;
+  created_at?: string;
 }
 
 const Inventory = () => {
@@ -23,25 +29,57 @@ const Inventory = () => {
   const { searchQuery, searchFilter } = useApp();
 
   useEffect(() => {
-    api.getInventory().then(setItems);
-    api.getInventoryAlerts().then(setAlerts);
+    const loadData = async () => {
+      try {
+        const inventoryData = await api.getInventory();
+        setItems(inventoryData);
+
+        // Create alerts for low stock items
+        const lowStockAlerts = inventoryData
+          .filter((item: InventoryItem) => item.quantity <= (item.minStock || 10))
+          .map((item: InventoryItem) => ({
+            id: `low-stock-${item._id}`,
+            severity: "warning",
+            title: `Low Stock: ${item.product}`,
+            description: `${item.quantity} units remaining at ${item.warehouse || 'Unknown warehouse'}`
+          }));
+
+        setAlerts(lowStockAlerts);
+      } catch (error) {
+        console.error("Failed to load inventory:", error);
+        setItems([]);
+        setAlerts([]);
+      }
+    };
+    loadData();
   }, []);
 
   const filtered = useMemo(() => {
+    if (!items || items.length === 0) return [];
     if (!searchQuery.trim()) return items;
     const q = searchQuery.toLowerCase();
-    return items.filter((i) => {
-      if (searchFilter === "sku") return i.sku.toLowerCase().includes(q) || i.name.toLowerCase().includes(q);
-      if (searchFilter === "warehouse") return i.warehouse.toLowerCase().includes(q);
-      return true;
-    });
+    try {
+      return items.filter((i) => {
+        if (!i) return false;
+        if (searchFilter === "sku") {
+          return (i.sku?.toLowerCase().includes(q) || false) || (i.product?.toLowerCase().includes(q) || false);
+        }
+        if (searchFilter === "warehouse") {
+          return i.warehouse?.toLowerCase().includes(q) || false;
+        }
+        return true;
+      });
+    } catch (error) {
+      console.error('Search filter error:', error);
+      return [];
+    }
   }, [items, searchQuery, searchFilter]);
 
   const stats = useMemo(() => ({
-    total: items.length,
-    low: items.filter((i) => i.status === "Low Stock").length,
-    out: items.filter((i) => i.status === "Out of Stock").length,
-    value: items.reduce((sum, i) => sum + i.quantity * 45, 0),
+    total: items?.length || 0,
+    low: items?.filter((i) => i.quantity <= (i.minStock || 10))?.length || 0,
+    out: items?.filter((i) => i.quantity === 0)?.length || 0,
+    value: items?.reduce((sum, i) => sum + (i.quantity || 0) * (i.unitCost || 45), 0) || 0,
   }), [items]);
 
   const columns: Column<InventoryItem>[] = [

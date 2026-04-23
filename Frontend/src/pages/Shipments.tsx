@@ -31,13 +31,14 @@ const Shipments = () => {
   }, []);
 
   const filtered = useMemo(() => {
+    if (!items || items.length === 0) return [];
     let data = items;
     if (statusFilter !== "all") data = data.filter((s) => s.status === statusFilter);
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       data = data.filter((s) => {
-        if (searchFilter === "orderId") return s.orderId.toLowerCase().includes(q);
-        if (searchFilter === "warehouse") return s.from.toLowerCase().includes(q) || s.to.toLowerCase().includes(q);
+        if (searchFilter === "orderId") return s.orderId?.toLowerCase().includes(q) || false;
+        if (searchFilter === "warehouse") return (s.from?.toLowerCase().includes(q) || false) || (s.to?.toLowerCase().includes(q) || false);
         return true;
       });
     }

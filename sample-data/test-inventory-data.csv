@@ -1,0 +1,6 @@
+sku,quantity,location,product,minstock,maxstock,warehouse,date
+SKU-500,1500,Mumbai,Widget A,100,2000,Mumbai-DC,2026-04-22
+SKU-501,800,Delhi,Widget B,50,1500,Delhi-DC,2026-04-22
+SKU-502,2000,Mumbai,Widget C,200,2500,Mumbai-DC,2026-04-22
+SKU-503,600,Delhi,Gadget A,75,1000,Delhi-DC,2026-04-22
+SKU-504,1200,Mumbai,Gadget B,100,1800,Mumbai-DC,2026-04-22

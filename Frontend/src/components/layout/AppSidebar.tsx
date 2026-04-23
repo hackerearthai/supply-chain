@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Truck, TrendingUp, Sparkles, Warehouse, Boxes } from "lucide-react";
+import { LayoutDashboard, Truck, TrendingUp, Warehouse, Boxes, Database, Upload, Cloud } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -15,11 +15,12 @@ import { cn } from "@/lib/utils";
 
 const items = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Inventory", url: "/inventory", icon: Package },
   { title: "Shipments", url: "/shipments", icon: Truck },
   { title: "Demand Forecast", url: "/forecast", icon: TrendingUp },
-  { title: "AI Recommendations", url: "/ai", icon: Sparkles },
   { title: "Warehouses", url: "/warehouses", icon: Warehouse },
+  { title: "My Data", url: "/data", icon: Database },
+  { title: "Upload CSV", url: "/upload", icon: Upload },
+  { title: "Google Sheets", url: "/sheets", icon: Cloud },
 ];
 
 export function AppSidebar() {

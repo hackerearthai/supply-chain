@@ -38,17 +38,21 @@ export const Topbar = () => {
   }, [location.pathname]);
 
   const searchEnabled = !!pageFilterMap[location.pathname];
-
-  const initials = user?.avatar ?? "—";
+  const initials = (user?.name || "")
+    .split(" ")
+    .map((part) => part.trim()[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "U";
   const placeholderText = searchEnabled
-    ? `Search by ${filterLabels[searchFilter].toLowerCase()}…`
+    ? `Search by ${filterLabels[searchFilter].toLowerCase()}...`
     : "Search disabled on this page";
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background px-4 md:px-8">
       <SidebarTrigger className="md:hidden" />
 
-      {/* Smart search — center, hairline rounded */}
       <div className="mx-auto hidden w-full max-w-2xl md:block">
         <div className="flex items-stretch overflow-hidden rounded-lg border border-border bg-card transition-base focus-within:border-foreground/30">
           <DropdownMenu>
@@ -84,14 +88,13 @@ export const Topbar = () => {
         </div>
       </div>
 
-      {/* User */}
       <DropdownMenu>
         <DropdownMenuTrigger className="ml-auto flex items-center gap-3 rounded-lg px-2 py-1.5 transition-base hover:bg-muted">
           <div className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card text-xs font-semibold text-foreground">
             {initials}
           </div>
           <div className="hidden text-left lg:block">
-            <p className="text-sm font-medium leading-none text-foreground">{user?.name ?? "Loading…"}</p>
+            <p className="text-sm font-medium leading-none text-foreground">{user?.name ?? "Loading..."}</p>
             <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-muted-foreground">{user?.role}</p>
           </div>
           <ChevronDown className="hidden h-4 w-4 text-muted-foreground lg:block" />

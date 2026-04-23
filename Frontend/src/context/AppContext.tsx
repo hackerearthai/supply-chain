@@ -1,13 +1,15 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import api from "@/services/api";
+import { setCurrentUser } from "@/services/api";
+import { subscribeToAuthChanges, logout as firebaseLogout } from "@/services/firebase";
 
 export type SearchFilter = "orderId" | "sku" | "warehouse";
 
 interface User {
+  uid: string;
   name: string;
   role: string;
   email: string;
-  avatar: string;
+  avatar?: string;
 }
 
 interface AppContextValue {
@@ -19,6 +21,7 @@ interface AppContextValue {
   resetSearch: () => void;
   // User
   user: User | null;
+  logout: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
@@ -29,14 +32,46 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    api.getCurrentUser().then(setUser);
+    const unsubscribe = subscribeToAuthChanges((firebaseUser) => {
+      if (firebaseUser) {
+        setCurrentUser(firebaseUser.uid);
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email || "",
+          name: firebaseUser.displayName || "",
+          role: "user",
+          avatar: firebaseUser.photoURL || undefined,
+        });
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const resetSearch = () => setSearchQuery("");
 
+  const logout = async () => {
+    try {
+      await firebaseLogout();
+      setUser(null);
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
   return (
     <AppContext.Provider
-      value={{ searchQuery, setSearchQuery, searchFilter, setSearchFilter, resetSearch, user }}
+      value={{
+        searchQuery,
+        setSearchQuery,
+        searchFilter,
+        setSearchFilter,
+        resetSearch,
+        user,
+        logout,
+      }}
     >
       {children}
     </AppContext.Provider>
