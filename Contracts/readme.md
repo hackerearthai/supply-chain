@@ -1,4 +1,4 @@
-Smart Inventory & Logistics Auditor
+# Smart Inventory & Logistics Auditor
 
 Solidity-based smart contract designed for a **Middleman/3PL business model**. It transforms a standard supply chain tracker into a powerful audit tool that cuts losses, ensures accountability, and maximizes profitability through automated SLA enforcement.
 
@@ -55,7 +55,7 @@ Beyond simple tracking, the contract provides a dedicated audit mechanism to ide
 
 ## 📜 Deployment & Development
 
-- **Compiler:** Solidity 0.8.20+
+- **Compiler:** Solidity 0.8.34+
 - **Framework:** Hardhat / Foundry / Remix
 - **Network:** Polygon Amoy
 - **Gas Token:** POL (Testnet)
