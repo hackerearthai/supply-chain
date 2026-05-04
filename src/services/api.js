@@ -11,6 +11,7 @@ const resolveBaseUrl = () => {
 
 const BASE_URL = resolveBaseUrl();
 
+
 // Store current userId from Firebase
 let currentUserId = "demo-user"; // Default user ID for testing
 
@@ -40,7 +41,7 @@ const getHeaders = (includeContentType = true) => {
   }
   return headers;
 };
-
+console.log("API BASE:", BASE_URL);
 export const loginUser = async (uid, email, name, avatar) => {
   return handleResponse(
     await fetch(buildUrl("/api/auth/login"), {
