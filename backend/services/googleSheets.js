@@ -45,7 +45,7 @@ const parseCsvTextRows = (csvText = '') => {
   const parsed = Papa.parse(csvText, {
     header: true,
     skipEmptyLines: true
-  });
+  }); 
 
   if (parsed.errors?.length) {
     const fatalError = parsed.errors.find((error) => error.code !== 'UndetectableDelimiter');
